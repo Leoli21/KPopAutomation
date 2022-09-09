@@ -1,6 +1,11 @@
 import datetime
 import requests
 
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 from googletrans import Translator
 from bs4 import BeautifulSoup
 
@@ -111,11 +116,67 @@ def get_MelonChart_data():
         # Add the current translated song and translated artist as an entry to dictionary
         melonChartSongs[translated_song] = translated_artist
     return melonChartSongs
+def get_GaonChart_data():
+    PATH = "C:\Program Files (x86)\chromedriver.exe"
+    driver = webdriver.Chrome(PATH)
+
+    # Dictionary with structure:
+    # Key = Song
+    # Value = Artist
+    gaonChartSongs = {}
+
+    korean_translator = Translator()
+    # Scraper and Selenium Object for Melon Chart
+    gaonChartHTML = chart_links['Gaon Chart']
+    driver.get(gaonChartHTML)
+
+    # Need to access the .text attribute and .strip() to get the titles formatted
+    song_titles = []
+
+    # Need to access the .text attribute and .strip() to get the artists formatted
+    song_artists = []
+    try:
+        song_titles = WebDriverWait(driver, 15).until(
+            EC.presence_of_all_elements_located((By.CSS_SELECTOR, '.font-bold.mb-2'))
+        )
+        song_artists = WebDriverWait(driver, 15).until(
+            EC.presence_of_all_elements_located((By.CSS_SELECTOR, '.text-sm.text-gray-400.font-bold'))
+        )
+    except:
+        driver.quit()
+
+    total_songs = len(song_titles)
+    for i in range(total_songs):
+        # Get current song's title
+        curr_song = song_titles[i].text.strip()
+
+        # Translate the current song's title to English
+        translated_song = korean_translator.translate(curr_song).text
+
+        # Get the current song's artist
+        curr_artist = song_artists[i].text.strip()
+
+        # Translate the current song's artist to English
+        translated_artist = korean_translator.translate(curr_artist).text
+
+        # Add the current translated song and translated artist as an entry to dictionary
+        gaonChartSongs[translated_song] = translated_artist
+
+    for k, v in gaonChartSongs.items():
+        print(f'Song: {k}')
+        print(f'Artist: {v}')
+        print()
+
+    driver.quit()
+    return gaonChartSongs
 
 if __name__ == '__main__':
     #iChartSongs = get_iChart_data()
     #melonChartSongs = get_MelonChart_data()
     pass
+
+
+
 
 
 
