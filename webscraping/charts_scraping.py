@@ -116,6 +116,7 @@ def get_MelonChart_data():
         # Add the current translated song and translated artist as an entry to dictionary
         melonChartSongs[translated_song] = translated_artist
     return melonChartSongs
+
 def get_GaonChart_data():
     PATH = "C:\Program Files (x86)\chromedriver.exe"
     driver = webdriver.Chrome(PATH)
@@ -170,10 +171,53 @@ def get_GaonChart_data():
     driver.quit()
     return gaonChartSongs
 
+def get_BillboardChart_data():
+    # Dictionary with structure:
+    # Key = Song
+    # Value = Artist
+    billboardChartSongs = {}
+
+    # Scraper and Soup Object for Melon Chart
+    billboardHTML = requests.get(chart_links['Billboard'])
+
+    soup2 = BeautifulSoup(billboardHTML.text, 'lxml')
+
+    # Get total songs in chart
+    total_songs = len(soup2.find_all(class_='o-chart-results-list-row-container'))
+
+    # Get the song's from the chart
+    song_titles = soup2.find_all('h3', class_='a-font-primary-bold-s')
+    song_titles = song_titles[2:]
+
+    # Get the artists from the chart
+    song_artists = soup2.find_all('span', class_='a-no-trucate')
+
+    # Populate our dictionary with those keys (song) and values (artist)
+    for i in range(total_songs):
+        # Get current song's title
+        curr_song = song_titles[i].text.strip()
+
+        # Get the current song's artist
+        curr_artist = song_artists[i].text.strip()
+
+        # Add the current translated song and translated artist as an entry to dictionary
+        billboardChartSongs[curr_song] = curr_artist
+
+    for k, v in billboardChartSongs.items():
+        print(f'{k} by {v}')
+        print()
+
+    return billboardChartSongs
+
 if __name__ == '__main__':
     #iChartSongs = get_iChart_data()
     #melonChartSongs = get_MelonChart_data()
+    #gaonChartSongs = get_GaonChart_data()
+    #billboardChartSongs = get_BillboardChart_data()
     pass
+
+
+
 
 
 
