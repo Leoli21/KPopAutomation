@@ -67,16 +67,17 @@ def get_iChart_data():
         curr_song = song_titles[i].text
 
         # Translate the current song's title to English
-        translated_song = korean_translator.translate(curr_song).text
+        #translated_song = korean_translator.translate(curr_song).text
 
         # Get the current song's artist
         curr_artist = song_artists[i].text
 
         # Translate the current song's artist to English
-        translated_artist = korean_translator.translate(curr_artist).text
+        #translated_artist = korean_translator.translate(curr_artist).text
 
         # Add the current translated song and translated artist as an entry to dictionary
-        iChartSongs[translated_song] = translated_artist
+        #iChartSongs[translated_song] = translated_artist
+        iChartSongs[curr_song] = curr_artist
     return iChartSongs
 
 def get_MelonChart_data():
@@ -115,6 +116,7 @@ def get_MelonChart_data():
 
         # Add the current translated song and translated artist as an entry to dictionary
         melonChartSongs[translated_song] = translated_artist
+        #melonChartSongs[curr_song] = curr_artist
     return melonChartSongs
 
 def get_GaonChart_data():
@@ -146,8 +148,7 @@ def get_GaonChart_data():
     except:
         driver.quit()
 
-    total_songs = len(song_titles)
-    for i in range(total_songs):
+    for i in range(100):
         # Get current song's title
         curr_song = song_titles[i].text.strip()
 
@@ -162,11 +163,7 @@ def get_GaonChart_data():
 
         # Add the current translated song and translated artist as an entry to dictionary
         gaonChartSongs[translated_song] = translated_artist
-
-    for k, v in gaonChartSongs.items():
-        print(f'Song: {k}')
-        print(f'Artist: {v}')
-        print()
+        #gaonChartSongs[curr_song] = curr_artist
 
     driver.quit()
     return gaonChartSongs
@@ -202,10 +199,6 @@ def get_BillboardChart_data():
 
         # Add the current translated song and translated artist as an entry to dictionary
         billboardChartSongs[curr_song] = curr_artist
-
-    for k, v in billboardChartSongs.items():
-        print(f'{k} by {v}')
-        print()
 
     return billboardChartSongs
 
