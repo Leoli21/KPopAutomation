@@ -2,6 +2,7 @@ import datetime
 import requests
 
 from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -120,8 +121,7 @@ def get_MelonChart_data():
     return melonChartSongs
 
 def get_GaonChart_data():
-    PATH = "C:\Program Files (x86)\chromedriver.exe"
-    driver = webdriver.Chrome(PATH)
+    driver = webdriver.Chrome(ChromeDriverManager().install())
 
     # Dictionary with structure:
     # Key = Song

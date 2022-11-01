@@ -5,6 +5,8 @@ import os
 from charts_scraping import *
 from datetime import date
 
+import base64
+
 # ID: f4861c4efd8743e2a66e63fdf1d42771
 # Secret: ffe1e86ffe5641de99f085f599fee693
 # Redirect URI: http://127.0.0.1:8080/
@@ -55,7 +57,11 @@ def iChart_automate():
     # If this does not exist, then create a new playlist
     playlist_info = get_user_playlist_info()
     iChart_playlist_name = 'iChart Weekly Playlist'
-    ichart_playlist_description = "Auto-updating playlist of iChart's weekly ranking chart. Last Updated: {date}".format(date=date.today())
+    ichart_playlist_description = "Auto-updating playlist of iChart's weekly ranking chart. Last Updated: {date}".format(
+        date=date.today())
+
+    #with open(os.path.abspath('../imgs/BillboardChart.jpeg')) as playlist_img:
+    #    encoded_playlist_cover_string = base64.b64encode(playlist_img.read())
 
     # Playlist Already Exists, so simply replace the items in the playlist with the tracks
     # Use method: playlist_replace_items(playlist_id, items)
@@ -72,8 +78,9 @@ def iChart_automate():
                                            description=ichart_playlist_description)
         iChart_playlist_ID = get_user_playlist_info()[iChart_playlist_name]
         spotifyObject.playlist_add_items(iChart_playlist_ID, playlist_tracks)
+        # Set the playist cover
+        #spotifyObject.playlist_upload_cover_image(iChart_playlist_ID, encoded_playlist_cover_string)
         print('Created the new playlist and added the tracks')
-
 
 def melon_automate():
     # Store the tracks that will be added to our playlist
@@ -98,7 +105,8 @@ def melon_automate():
     # If this does not exist, then create a new playlist
     playlist_info = get_user_playlist_info()
     melon_chart_playlist_name = 'Melon Chart Weekly Playlist'
-    melon_playlist_description = "Auto-updating playlist of Melon Chart's weekly ranking chart. Last Updated: {date}".format(date=date.today())
+    melon_playlist_description = "Auto-updating playlist of Melon Chart's weekly ranking chart. Last Updated: {date}".format(
+        date=date.today())
 
     # Playlist Already Exists, so simply replace the items in the playlist with the tracks
     # Use method: playlist_replace_items(playlist_id, items)
